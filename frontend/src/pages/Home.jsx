@@ -3,20 +3,19 @@ import axios from 'axios'
 import BooksCard from '../components/home/BooksCard'
 import BooksTable from '../components/home/BooksTable'
 import { Link } from 'react-router-dom'
-import { AiOutlineEdit } from 'react-icons/ai'
-import { BsInfoCircle } from 'react-icons/bs'
-import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md'
+import { MdOutlineAddBox } from 'react-icons/md'
 import Spinner from '../components/Spinner'
 
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showType, setShowType] = useState('table')
+  const [showType, setShowType] = useState('table');
 
   useEffect(() => {
     setLoading(true);
     axios.get('http://localhost:8000/books')
       .then(res => {
+        console.log(res.data);
         setBooks(res.data);
         setLoading(false);
       })
@@ -28,28 +27,30 @@ const Home = () => {
   return (
     <div className='p-4'>
       <div className="flex justify-end items-center gap-x-4">
-        <button className={`text-xl ${showType === 'table' ? 'text-sky-800' : 'text-gray-500'}`} onClick={() => setShowType('table')}>
-          <BsInfoCircle />
+        <button className={`text-xl ${showType === 'table' ? 'text-sky-800 bg-sky-300 px-4 py-1  rounded-lg' : 'text-gray-500'}`} onClick={() => setShowType('table')}>
+         Table
         </button>
-        <button className={`text-xl ${showType === 'card' ? 'text-sky-800' : 'text-gray-500'}`} onClick={() => setShowType('card')}>
-          <AiOutlineEdit />
+        <button className={`text-xl ${showType === 'card' ? 'text-sky-800 bg-sky-300 px-4 py-1  rounded-lg' : 'text-gray-500 '}`} onClick={() => setShowType('card')}>
+        Card
         </button>
       </div>
 
 
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl my8">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl ">
           Books List
         </h1>
         <Link to='/books/create'>
           <MdOutlineAddBox className='text-sky-800 text-4xl' />
         </Link>
       </div>
+
+
       {loading ? (
         <Spinner />
-      ) : showType === 'table' ? (
+      ) : (showType === 'table' ? (
         <BooksTable books={books} />
-      ) : (<BooksCard books={books} />)
+      ) : (<BooksCard books={books} />))
       }
     </div>
   )
